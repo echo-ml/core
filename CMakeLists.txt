@@ -16,4 +16,4 @@ file(GLOB headers
 
 install(FILES ${headers} DESTINATION include/echo)
 
-add_subdirectory(test)
+add_subdirectory(unittest)
