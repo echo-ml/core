@@ -34,6 +34,12 @@ class Index<1>
   operator IndexInteger() { return this->operator[](0); }
 };
 
+template<int I, int N>
+IndexInteger get(const Index<N>& index) {
+  static_assert(0 <= I && I < N, "");
+  return index[I];
+}
+
 template<IndexInteger... Values>
 struct StaticIndex 
   : fatal::constant_sequence<IndexInteger, Values...>
@@ -52,6 +58,14 @@ struct StaticIndex<I>
     return I;
   }
 };
+
+template<int I, IndexInteger... Values>
+auto get(const StaticIndex<Values...>&) ->
+    StaticIndex<StaticIndex<Values...>::list::template at<I>::value>
+{
+  static_assert(0 <= I && I < sizeof...(Values), "");
+  return {};
+}
 
 #define MAKE_COMPARISON_OPERATOR(OPERATOR) \
   template<IndexInteger Lhs, IndexInteger Rhs> \
