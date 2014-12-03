@@ -60,7 +60,7 @@ struct StaticIndex<I>
 };
 
 template<int I, IndexInteger... Values>
-auto get(const StaticIndex<Values...>&) ->
+constexpr auto get(const StaticIndex<Values...>&) ->
     StaticIndex<StaticIndex<Values...>::list::template at<I>::value>
 {
   static_assert(0 <= I && I < sizeof...(Values), "");
