@@ -188,15 +188,4 @@ constexpr int find_last(const fatal::constant_sequence<T, ValueFirst, ValuesRest
        : (ValueFirst == Key ? 0 : kNotFound);
 }
 
-/////////
-// map //
-/////////
-
-template<class F, class T, T... Values>
-constexpr
-fatal::constant_sequence<decltype(F()(T())), F()(Values)...>
-map(const fatal::constant_sequence<T, Values...>&) {
-  return {};
-}
-
 }} //end namespace

@@ -63,10 +63,6 @@ TEST_CASE("const algorithm tests") {
   SECTION("find_last") {
     STATIC_EQUAL(int, find_last(S2(), Int<1>()), 1);
   }
-  SECTION("map") {
-    echo::type_equal<fatal::constant_sequence<int, 2, 3, 4, 5, 6>
-                   , decltype(map<Inc>(S1()))>();
-  }
   SECTION("slice") {
     echo::type_equal<fatal::constant_sequence<int, 2, 3>
                    , decltype(slice<1, 3>(S1()))>();
