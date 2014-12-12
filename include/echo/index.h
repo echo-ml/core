@@ -9,29 +9,45 @@ using IndexInteger = int;
 
 template<int N>
 class Index 
-  : public boost::array<IndexInteger, N>
 {
-  using Base = boost::array<IndexInteger, N>;
  public:
   Index() {}
 
   template<class... Indexes>
   Index(Indexes... indexes) 
-    : Base({indexes...}) 
+    : _indexes({indexes...}) 
   {
     static_assert(sizeof...(Indexes) == N, "");
   }
+
+  IndexInteger operator[](int i) const {
+    return _indexes[i];
+  }
+ private:
+  boost::array<IndexInteger, N> _indexes;
 };
 
 template<>
 class Index<1>
-  : public boost::array<IndexInteger, 1>
 {
  public:
   Index() {}
-  explicit Index(int i) : boost::array<IndexInteger, 1>({i}) {}
+  explicit Index(int i) : _index(i) {}
 
-  operator IndexInteger() { return this->operator[](0); }
+  operator IndexInteger() { return _index; }
+
+  IndexInteger operator[](int i) const {
+    return _index;
+  }
+ private:
+  IndexInteger _index;
+};
+
+template<>
+class Index<0>
+{
+ public:
+  Index() {}
 };
 
 template<int I, int N>
