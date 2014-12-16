@@ -23,6 +23,18 @@ class Index
   IndexInteger operator[](int i) const {
     return _indexes[i];
   }
+  const IndexInteger* begin() const {
+    return _indexes.begin();
+  }
+  const IndexInteger* end() const {
+    return _indexes.end();
+  }
+  IndexInteger* begin() {
+    return _indexes.begin();
+  }
+  IndexInteger* end() {
+    return _indexes.end();
+  }
  private:
   boost::array<IndexInteger, N> _indexes;
 };
@@ -39,6 +51,18 @@ class Index<1>
   IndexInteger operator[](int i) const {
     return _index;
   }
+  const IndexInteger* begin() const {
+    return &_index;
+  }
+  const IndexInteger* end() const {
+    return &_index+1;
+  }
+  IndexInteger* begin() {
+    return &_index;
+  }
+  IndexInteger* end() {
+    return &_index+1;
+  }
  private:
   IndexInteger _index;
 };
@@ -48,6 +72,18 @@ class Index<0>
 {
  public:
   Index() {}
+  const IndexInteger* begin() const {
+    return nullptr;
+  }
+  const IndexInteger* end() const {
+    return nullptr;
+  }
+  IndexInteger* begin() {
+    return nullptr;
+  }
+  IndexInteger* end() {
+    return nullptr;
+  }
 };
 
 template<int I, int N>
