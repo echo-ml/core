@@ -20,6 +20,9 @@ class Index
     static_assert(sizeof...(Indexes) == N, "");
   }
 
+  IndexInteger& operator[](int i) {
+    return _indexes[i];
+  }
   IndexInteger operator[](int i) const {
     return _indexes[i];
   }
@@ -48,6 +51,9 @@ class Index<1>
 
   operator IndexInteger() { return _index; }
 
+  IndexInteger& operator[](int i) {
+    return _index;
+  }
   IndexInteger operator[](int i) const {
     return _index;
   }
