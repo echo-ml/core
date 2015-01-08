@@ -1,3 +1,4 @@
+#include <memory>
 #include <echo/concept.h>
 #include <catch.hpp>
 #include <memory>
@@ -16,7 +17,10 @@ TEST_CASE("concept tests") {
     REQUIRE(concept::is_random_access_iterator<float*>());
     REQUIRE(!concept::is_random_access_iterator<std::list<float>::iterator>());
   }
-
+  
+  SECTION("allocator") {
+    REQUIRE(concept::is_allocator<std::allocator<double>>());
+  }
 
   // REQUIRE(3 == 4);
 }

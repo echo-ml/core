@@ -246,4 +246,20 @@ TICK_TRAIT(
   >;
 };
 
+TICK_TRAIT(
+    is_allocator
+  , is_copyable<_>
+) {
+  template<class Allocator>
+  auto requires_(Allocator allocator) -> tick::valid<
+      decltype(allocator.allocate(0))
+    , decltype(allocator.deallocate(nullptr, 0))
+    , has_type<typename Allocator::value_type>
+    , has_type<typename Allocator::pointer>
+    , has_type<typename Allocator::const_pointer>
+    , has_type<typename Allocator::reference>
+    , has_type<typename Allocator::const_reference>
+  >;
+};
+
 }} //end namespace
