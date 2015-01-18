@@ -48,3 +48,15 @@ TEST_CASE("static index") {
     REQUIRE(get<2>(SI1()) == 3);
   }
 }
+
+TEST_CASE("static index literal") {
+  type_equal<
+      decltype(123_index)
+    , StaticIndex<123>
+  >();
+
+  type_equal<
+      decltype(-123_index)
+    , StaticIndex<-123>
+  >();
+}

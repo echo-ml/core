@@ -7,6 +7,10 @@ namespace echo {
 
 using IndexInteger = int;
 
+///////////
+// Index //
+///////////
+
 template<int N>
 class Index 
 {
@@ -92,11 +96,19 @@ class Index<0>
   }
 };
 
+/////////
+// get //
+/////////
+
 template<int I, int N>
 IndexInteger get(const Index<N>& index) {
   static_assert(0 <= I && I < N, "");
   return index[I];
 }
+
+/////////////////
+// StaticIndex //
+/////////////////
 
 template<IndexInteger... Values>
 struct StaticIndex 
@@ -115,7 +127,14 @@ struct StaticIndex<I>
   constexpr IndexInteger operator()() const {
     return I;
   }
+  constexpr StaticIndex<-I> operator-() const {
+    return {};
+  }
 };
+
+/////////
+// get //
+/////////
 
 template<int I, IndexInteger... Values>
 constexpr auto get(const StaticIndex<Values...>&) ->
@@ -124,6 +143,45 @@ constexpr auto get(const StaticIndex<Values...>&) ->
   static_assert(0 <= I && I < sizeof...(Values), "");
   return {};
 }
+
+/////////////////
+// ParseDigits //
+/////////////////
+
+namespace detail {   
+   
+template<IndexInteger Value, char...>   
+struct ParseDigitsImpl {   
+  static constexpr IndexInteger value = Value;   
+};   
+   
+template<IndexInteger Value, char First, char... Rest>   
+struct ParseDigitsImpl<Value, First, Rest...> {   
+  static constexpr IndexInteger value =   
+    ParseDigitsImpl<   
+        10*Value + (First - '0')   
+      , Rest...>::value;   
+};   
+   
+template<char First, char... Rest>   
+struct ParseDigits {   
+  static constexpr IndexInteger value = ParseDigitsImpl<0, First, Rest...>::value;
+};   
+   
+} //end namespace detail 
+
+/////////////////////
+// index - literal //
+/////////////////////
+
+template<char... Chars>
+constexpr auto operator"" _index() {
+  return StaticIndex<detail::ParseDigits<Chars...>::value>{};
+}
+
+///////////////////////////
+// arithmetic operations //
+///////////////////////////
 
 #define MAKE_COMPARISON_OPERATOR(OPERATOR) \
   template<IndexInteger Lhs, IndexInteger Rhs> \
