@@ -247,7 +247,17 @@ TICK_TRAIT(
 };
 
 TICK_TRAIT(
-    is_allocator
+    is_static_allocator
+  , is_copyable<_>
+) {
+  template<class Allocator>
+  auto requires_(Allocator allocator) -> tick::valid<
+      has_type<typename Allocator::template buffer_type<1>>
+  >;
+};
+
+TICK_TRAIT(
+    is_dynamic_allocator
   , is_copyable<_>
 ) {
   template<class Allocator>
@@ -259,6 +269,16 @@ TICK_TRAIT(
     , has_type<typename Allocator::const_pointer>
     , has_type<typename Allocator::reference>
     , has_type<typename Allocator::const_reference>
+  >;
+};
+
+TICK_TRAIT(is_allocator) {
+  template<class Allocator>
+  auto requires_(Allocator allocator) -> tick::valid<
+      is_true_c<
+          is_static_allocator<Allocator>()
+       || is_dynamic_allocator<Allocator>()
+      >
   >;
 };
 
