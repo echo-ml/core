@@ -10,6 +10,8 @@ namespace echo {
 
 template<class Scalar, int NumElements, int Alignment>
 class StaticMemoryBuffer {
+  static_assert(NumElements != NumElements
+              , "Buffer with given alignment is not supported");
 };
 
 template<class Scalar, int NumElements>
