@@ -2,27 +2,24 @@
 
 #include <type_traits>
 
-namespace echo { namespace type_traits {
+namespace echo {
+namespace type_traits {
 
 ///////////////////////////
 // ConvertToConstPointer //
 ///////////////////////////
 
-template<class Pointer>
+template <class Pointer>
 struct ConvertToConstPointer {};
 
-template<class T>
-struct ConvertToConstPointer<
-    T*
-> {
+template <class T>
+struct ConvertToConstPointer<T*> {
   using type = const T*;
 };
 
-template<class T>
-struct ConvertToConstPointer<
-    const T*
-> {
+template <class T>
+struct ConvertToConstPointer<const T*> {
   using type = const T*;
 };
-
-}} //end namespace echo::type_traits
+}  // namespace type_traits
+}  // namespace echo

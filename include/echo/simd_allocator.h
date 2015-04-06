@@ -8,7 +8,8 @@
 
 namespace echo {
 
-template<class T>
-using SimdAllocator = boost::alignment::aligned_allocator<T, ECHO_SIMD_ALIGNMENT>;
+template <class T>
+using SimdAllocator =
+    boost::alignment::aligned_allocator<T, ECHO_SIMD_ALIGNMENT>;
 
-} //end namespace echo
+}  // end namespace echo
