@@ -174,8 +174,8 @@ TICK_TRAIT(is_dynamic_allocator, is_copyable<_>) {
 TICK_TRAIT(is_allocator) {
   template <class Allocator>
   auto requires_(Allocator allocator)
-      ->tick::valid<is_true_c<is_static_allocator<Allocator>() ||
-                              is_dynamic_allocator<Allocator>()>>;
+      ->tick::valid<is_true_c<is_static_allocator<Allocator>::value ||
+                              is_dynamic_allocator<Allocator>::value>>;
 };
 }  // namespace concept
 }  // namespace echo

@@ -55,6 +55,15 @@ constexpr bool and_(const fatal::constant_sequence<bool, Values...>& values) {
   return product(values);
 }
 
+///////////
+// and_c //
+///////////
+
+template <bool... Values>
+constexpr bool and_c() {
+  return and_(fatal::constant_sequence<bool, Values...>{});
+}
+
 /////////
 // or_ //
 /////////
@@ -62,6 +71,15 @@ constexpr bool and_(const fatal::constant_sequence<bool, Values...>& values) {
 template <bool... Values>
 constexpr bool or_(const fatal::constant_sequence<bool, Values...>&) {
   return sum(fatal::constant_sequence<bool, Values...>()) > 0;
+}
+
+//////////
+// or_c //
+//////////
+
+template <bool... Values>
+constexpr bool or_c() {
+  return or_(fatal::constant_sequence<bool, Values...>{});
 }
 
 //////////////////////////

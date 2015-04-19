@@ -5,7 +5,10 @@
 
 namespace echo {
 
+// deprecated
 using IndexInteger = int;
+
+using index_t = int;
 
 ///////////
 // Index //
@@ -22,15 +25,15 @@ class Index {
     static_assert(sizeof...(Indexes) == N, "");
   }
 
-  IndexInteger& operator[](int i) { return _indexes[i]; }
-  IndexInteger operator[](int i) const { return _indexes[i]; }
-  const IndexInteger* begin() const { return _indexes.begin(); }
-  const IndexInteger* end() const { return _indexes.end(); }
-  IndexInteger* begin() { return _indexes.begin(); }
-  IndexInteger* end() { return _indexes.end(); }
+  index_t& operator[](int i) { return _indexes[i]; }
+  index_t operator[](int i) const { return _indexes[i]; }
+  const index_t* begin() const { return _indexes.begin(); }
+  const index_t* end() const { return _indexes.end(); }
+  index_t* begin() { return _indexes.begin(); }
+  index_t* end() { return _indexes.end(); }
 
  private:
-  boost::array<IndexInteger, N> _indexes;
+  boost::array<index_t, N> _indexes;
 };
 
 template <>
@@ -39,27 +42,27 @@ class Index<1> {
   Index() {}
   explicit Index(int i) : _index(i) {}
 
-  operator IndexInteger() { return _index; }
+  operator index_t() { return _index; }
 
-  IndexInteger& operator[](int i) { return _index; }
-  IndexInteger operator[](int i) const { return _index; }
-  const IndexInteger* begin() const { return &_index; }
-  const IndexInteger* end() const { return &_index + 1; }
-  IndexInteger* begin() { return &_index; }
-  IndexInteger* end() { return &_index + 1; }
+  index_t& operator[](int i) { return _index; }
+  index_t operator[](int i) const { return _index; }
+  const index_t* begin() const { return &_index; }
+  const index_t* end() const { return &_index + 1; }
+  index_t* begin() { return &_index; }
+  index_t* end() { return &_index + 1; }
 
  private:
-  IndexInteger _index;
+  index_t _index;
 };
 
 template <>
 class Index<0> {
  public:
   Index() {}
-  const IndexInteger* begin() const { return nullptr; }
-  const IndexInteger* end() const { return nullptr; }
-  IndexInteger* begin() { return nullptr; }
-  IndexInteger* end() { return nullptr; }
+  const index_t* begin() const { return nullptr; }
+  const index_t* end() const { return nullptr; }
+  index_t* begin() { return nullptr; }
+  index_t* end() { return nullptr; }
 };
 
 /////////
@@ -67,7 +70,7 @@ class Index<0> {
 /////////
 
 template <int I, int N>
-IndexInteger get(const Index<N>& index) {
+index_t get(const Index<N>& index) {
   static_assert(0 <= I && I < N, "");
   return index[I];
 }
@@ -76,14 +79,14 @@ IndexInteger get(const Index<N>& index) {
 // StaticIndex //
 /////////////////
 
-template <IndexInteger... Values>
-struct StaticIndex : fatal::constant_sequence<IndexInteger, Values...> {};
+template <index_t... Values>
+struct StaticIndex : fatal::constant_sequence<index_t, Values...> {};
 
-template <IndexInteger I>
-struct StaticIndex<I> : std::integral_constant<IndexInteger, I>,
-                        fatal::constant_sequence<IndexInteger, I> {
-  constexpr operator IndexInteger() const { return I; }
-  constexpr IndexInteger operator()() const { return I; }
+template <index_t I>
+struct StaticIndex<I> : std::integral_constant<index_t, I>,
+                        fatal::constant_sequence<index_t, I> {
+  constexpr operator index_t() const { return I; }
+  constexpr index_t operator()() const { return I; }
   constexpr StaticIndex<-I> operator-() const { return {}; }
 };
 
@@ -91,7 +94,7 @@ struct StaticIndex<I> : std::integral_constant<IndexInteger, I>,
 // get //
 /////////
 
-template <int I, IndexInteger... Values>
+template <int I, index_t... Values>
 constexpr auto get(const StaticIndex<Values...>&)
     -> StaticIndex<StaticIndex<Values...>::list::template at<I>::value> {
   static_assert(0 <= I && I < sizeof...(Values), "");
@@ -104,21 +107,20 @@ constexpr auto get(const StaticIndex<Values...>&)
 
 namespace detail {
 
-template <IndexInteger Value, char...>
+template <index_t Value, char...>
 struct ParseDigitsImpl {
-  static constexpr IndexInteger value = Value;
+  static constexpr index_t value = Value;
 };
 
-template <IndexInteger Value, char First, char... Rest>
+template <index_t Value, char First, char... Rest>
 struct ParseDigitsImpl<Value, First, Rest...> {
-  static constexpr IndexInteger value =
+  static constexpr index_t value =
       ParseDigitsImpl<10 * Value + (First - '0'), Rest...>::value;
 };
 
 template <char First, char... Rest>
 struct ParseDigits {
-  static constexpr IndexInteger value =
-      ParseDigitsImpl<0, First, Rest...>::value;
+  static constexpr index_t value = ParseDigitsImpl<0, First, Rest...>::value;
 };
 
 }  // end namespace detail
@@ -137,7 +139,7 @@ constexpr auto operator"" _index() {
 ///////////////////////////
 
 #define MAKE_COMPARISON_OPERATOR(OPERATOR)                   \
-  template <IndexInteger Lhs, IndexInteger Rhs>              \
+  template <index_t Lhs, index_t Rhs>                        \
   constexpr std::integral_constant<bool, (Lhs OPERATOR Rhs)> \
   operator OPERATOR(const StaticIndex<Lhs>& lhs,             \
                     const StaticIndex<Rhs>& rhs) {           \
@@ -153,7 +155,7 @@ MAKE_COMPARISON_OPERATOR(== )
 #undef MAKE_COMPARISON_OPERATOR
 
 #define MAKE_ARITHMETIC_OPERATOR(OPERATOR)                        \
-  template <IndexInteger Lhs, IndexInteger Rhs>                   \
+  template <index_t Lhs, index_t Rhs>                             \
   constexpr StaticIndex<(Lhs OPERATOR Rhs)> operator OPERATOR(    \
       const StaticIndex<Lhs>& lhs, const StaticIndex<Rhs>& rhs) { \
     return {};                                                    \

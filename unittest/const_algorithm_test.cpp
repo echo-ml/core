@@ -1,5 +1,3 @@
-#pragma once
-
 #include <echo/const_algorithm.h>
 #include <echo/test.h>
 #include <catch.hpp>

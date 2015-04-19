@@ -1,5 +1,3 @@
-#pragma once
-
 #include <echo/index.h>
 #include <echo/test.h>
 #include <catch.hpp>
