@@ -13,6 +13,9 @@ struct A {
   int f4(int) const volatile;
 };
 
+struct B { int operator()() const; };
+struct C { int operator()(); };
+
 TEST_CASE("type_traits") {
   using P1 = ConvertToConstPointer<int*>::type;
   CHECK(std::is_same<P1, const int*>::value);
@@ -33,4 +36,7 @@ TEST_CASE("type_traits") {
                        int>::value);
 
   CHECK(type_traits::function_arity<decltype(f1)>() == 1);
+
+  CHECK(type_traits::is_const_functor<B>());
+  CHECK(!type_traits::is_const_functor<C>());
 }

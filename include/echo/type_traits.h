@@ -55,7 +55,6 @@ template <class Return, class Record, class... Args>
 struct FunctionReturnType<Return (Record::*)(Args...) const volatile> {
   using type = Return;
 };
-
 }
 }
 
@@ -75,7 +74,8 @@ using functor_return_type =
 // function_arity //
 ////////////////////
 
-namespace detail { namespace type_traits {
+namespace detail {
+namespace type_traits {
 template <class T>
 struct FunctionArity {};
 
@@ -103,9 +103,10 @@ template <class Return, class Record, class... Args>
 struct FunctionArity<Return (Record::*)(Args...) const volatile> {
   static constexpr int value = sizeof...(Args);
 };
-}}
+}
+}
 
-template<class FunctionPtr>
+template <class FunctionPtr>
 constexpr int function_arity() {
   return detail::type_traits::FunctionArity<FunctionPtr>::value;
 }
@@ -114,9 +115,33 @@ constexpr int function_arity() {
 // functor_arity //
 ///////////////////
 
-template<class Functor>
+template <class Functor>
 constexpr int functor_arity() {
   return function_arity<decltype(&Functor::operator())>();
+}
+
+//////////////////////
+// is_const_functor //
+//////////////////////
+
+namespace detail {
+namespace type_traits {
+template <class>
+struct ConstFunctor : std::false_type {};
+
+template <class Return, class Record, class... Args>
+struct ConstFunctor<Return (Record::*)(Args...) const> : std::true_type {};
+
+template <class Return, class Record, class... Args>
+struct ConstFunctor<Return (Record::*)(Args...) const volatile>
+    : std::true_type {};
+}
+}
+
+template <class Functor>
+constexpr bool is_const_functor() {
+  return detail::type_traits::ConstFunctor<decltype(
+      &Functor::operator())>::value;
 }
 
 }  // namespace type_traits
