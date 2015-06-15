@@ -1,5 +1,5 @@
 #include <echo/type_traits.h>
-#include <catch.hpp>
+#include <echo/test.h>
 
 using namespace echo;
 using namespace echo::type_traits;
