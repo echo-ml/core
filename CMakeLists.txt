@@ -4,24 +4,10 @@ project("echo-core")
 
 enable_testing()
 
-include(Echo/Test)
+enable_testing()
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+find_package(Echo)
+include(Echo/Default)
 
-file(GLOB headers
-  RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include/echo/*.h"
-)
-
-file(GLOB unittests
-  RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/unittest/*_test.cpp"
-)
-
-
-install(FILES ${headers} DESTINATION include/echo)
-
-add_catch_test(core-test ${unittests})
-
-# add_subdirectory(unittest)
+ECHO_INSTALL_DEFAULT_HEADERS()
+ECHO_ADD_DEFAULT_TEST()
