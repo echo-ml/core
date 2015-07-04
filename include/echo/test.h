@@ -13,6 +13,9 @@
 
 namespace echo {
 
+//------------------------------------------------------------------------------
+// type_equal
+//------------------------------------------------------------------------------
 template<class T1, class T2>
 void type_equal() {
   auto lhs = boost::typeindex::type_id<T1>().pretty_name();
