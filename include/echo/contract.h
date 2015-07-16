@@ -71,7 +71,11 @@ struct ContractViolation : virtual std::runtime_error {
     throw echo::ContractViolation(); \
   }
 #else
+#ifndef NDEBUG
 #define CONTRACT_ASSERT(CONDITION) assert(CONDITION);
+#else
+#define CONTRACT_ASSERT(CONDITION)
+#endif
 #endif
 
 #ifndef NDEBUG
