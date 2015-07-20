@@ -61,14 +61,15 @@ void operator+(ContractIgnore, Functor&&) {}
 // ContractViolation
 //------------------------------------------------------------------------------
 struct ContractViolation : virtual std::runtime_error {
-  ContractViolation() : std::runtime_error("ContractViolation") {}
+  ContractViolation(const char* message) : std::runtime_error(message) {}
 };
 }
 
 #ifdef ECHO_CONTRACT_VIOLATION_THROW
-#define CONTRACT_ASSERT(CONDITION)   \
-  if (!(CONDITION)) {                \
-    throw echo::ContractViolation(); \
+#define CONTRACT_ASSERT(CONDITION)                                         \
+  if (!(CONDITION)) {                                                      \
+    throw echo::ContractViolation("Contract \"" ECHO_STRINGIFY(            \
+        CONDITION) "\" failed in " __FILE__ ":" ECHO_STRINGIFY(__LINE__)); \
   }
 #else
 #ifndef NDEBUG
