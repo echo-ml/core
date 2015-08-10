@@ -20,7 +20,8 @@ template<class T1, class T2>
 void type_equal() {
   auto lhs = boost::typeindex::type_id<T1>().pretty_name();
   auto rhs = boost::typeindex::type_id<T2>().pretty_name();
-  REQUIRE(lhs == rhs);
+  CHECK(lhs == rhs);
+  CHECK(std::is_same<T1, T2>::value);
 }
 
 } //end namespace
